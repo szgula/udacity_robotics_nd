@@ -69,6 +69,7 @@
       <origin xyz="0 0 0" rpy=" 0 0 0"/>
       <geometry>
         <box size=".4 .2 .1"/>
+        <material name="red"/>
       </geometry>
     </visual>
 
@@ -84,6 +85,7 @@
       <origin xyz="-0.15 0 -0.05" rpy=" 0 0 0"/>
       <geometry>
         <sphere radius="0.05"/>
+        <material name="black"/>
       </geometry>
     </visual>
 
@@ -98,11 +100,15 @@
       <origin xyz="0.15 0 -0.05" rpy=" 0 0 0"/>
       <geometry>
         <sphere radius="0.05"/>
+        <material name="black"/>
       </geometry>
     </visual>
 
   </link>
   
+  <gazebo reference="chassis">
+    <material>Gazebo/Red</material>
+  </gazebo>
   
   
   
@@ -129,6 +135,7 @@
       <origin xyz="0 0 0" rpy=" 0 1.5707 1.5707"/>
       <geometry>
         <cylinder radius="0.1" length="0.05"/>
+        <material name="blue"/>
       </geometry>
     </visual>
   </link>
@@ -153,11 +160,17 @@
       <origin xyz="0 0 0" rpy=" 0 1.5707 1.5707"/>
       <geometry>
         <cylinder radius="0.1" length="0.05"/>
+        <material name="blue"/>
       </geometry>
     </visual>
   </link>
   
-  
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Blue</material>
+  </gazebo>
   
   
   <link name='camera'>
