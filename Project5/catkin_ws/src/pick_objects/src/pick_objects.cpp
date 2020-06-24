@@ -5,6 +5,9 @@
 // Define a client for to send goal requests to the move_base server through a SimpleActionClient
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
+float pickUp[3] = {-1.0, 1.4, 0.0};
+float dropOff[3] = {-2.6, -0.4, 0.0};
+
 int main(int argc, char** argv){
   // Initialize the simple_navigation_goals node
   ros::init(argc, argv, "pick_objects");
@@ -24,9 +27,9 @@ int main(int argc, char** argv){
   goal.target_pose.header.stamp = ros::Time::now();
 
   // Define a position and orientation for the robot to reach
-  goal.target_pose.pose.position.x = -1.0;
-  goal.target_pose.pose.position.y = 1.4;
-  goal.target_pose.pose.orientation.w = 0.0;
+  goal.target_pose.pose.position.x = pickUp[0];
+  goal.target_pose.pose.position.y = pickUp[1];
+  goal.target_pose.pose.orientation.w = pickUp[2];
 
    // Send the goal position and orientation for the robot to reach
   ROS_INFO("Sending goal");
@@ -36,27 +39,31 @@ int main(int argc, char** argv){
   ac.waitForResult();
 
   // Check if the robot reached its goal
-  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Finally, the bot reached the pickup loaction");
-  else
-    ROS_INFO("The robot failed to reach for some reason");
-  ros::Duration(5.0).sleep(); //bot waits for 5 secs after reaching the pickup location
+  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
+    ROS_INFO("Reached the pickup loaction");
+    
+    ros::Duration(5.0).sleep();
 
-  goal.target_pose.pose.position.x = -2.6;
-  goal.target_pose.pose.position.y = -0.4;
-  goal.target_pose.pose.orientation.w = 0.0;
+    goal.target_pose.pose.position.x = dropOff[0];
+    goal.target_pose.pose.position.y = dropOff[1];
+    goal.target_pose.pose.orientation.w = dropOff[2];
+    ROS_INFO("Sending goal");
+  	ac.sendGoal(goal);
+  }
+  else {
+    ROS_INFO("Failed - Reached the pickup loaction");
+  }
   
-
-  ROS_INFO("Sending goal");
-  ac.sendGoal(goal);
 
   ac.waitForResult();
 
 
-  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Finally, the bot reached the drop loaction");
-  else
-    ROS_INFO("The robot failed to reach for some reason");
+  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
+    ROS_INFO("Reached the drop loaction");
+  }
+  else {
+    ROS_INFO("Failed - Reached the drop loaction");
+  }
 
   ros::Duration(5.0).sleep();
   return 0;
